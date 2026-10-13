@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ryanPerfumeApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan's Perfume - Luxury Fragrances & Artisanal Scents</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- AngularJS 1.8.2 -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+    <style>
+        :root {
+            --bg-primary: #0e0f12;
+            --bg-secondary: #16181f;
+            --bg-card: #1c1e27;
+            --accent-gold: #cfa859;
+            --accent-gold-hover: #e5bd6a;
+            --accent-gold-soft: rgba(207, 168, 89, 0.15);
+            --text-primary: #f5f5f7;
+            --text-secondary: #a3a6b5;
+            --text-muted: #747788;
+            --border-color: rgba(207, 168, 89, 0.25);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', Arial, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, .brand-font {
+            font-family: 'Cinzel', serif;
+            letter-spacing: 1px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: rgba(14, 15, 18, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            font-size: 26px;
+            color: var(--accent-gold);
+        }
+
+        header h1 {
+            color: var(--accent-gold);
+            font-size: 26px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 8px 14px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-radius: 4px;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+            background: var(--accent-gold-soft);
+        }
+
+        .cart-nav-badge {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            font-weight: 700;
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 520px;
+            padding: 100px 20px;
+            text-align: center;
+            color: #ffffff;
+            background: linear-gradient(rgba(10, 11, 14, 0.75), rgba(10, 11, 14, 0.85)),
+                        url("https://images.unsplash.com/photo-1616949755610-8c9bbc08f138?auto=format&fit=crop&w=1600&q=80");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-tag {
+            color: var(--accent-gold);
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .hero h2 {
+            font-size: 46px;
+            margin-bottom: 15px;
+            color: #ffffff;
+            text-shadow: 0 4px 15px rgba(0,0,0,0.7);
+        }
+
+        .hero p.tagline {
+            font-size: 20px;
+            color: #e5bd6a;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .hero p.desc {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 650px;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #cfa859 0%, #b38b38 100%);
+            color: #0e0f12;
+            padding: 13px 30px;
+            border: 1px solid #e5bd6a;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(207, 168, 89, 0.3);
+        }
+
+        .btn:hover {
+            background: #ffffff;
+            color: #0e0f12;
+            border-color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-size: 13px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-outline:hover {
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+        }
+
+        .btn-remove {
+            background: transparent;
+            color: #ff6b6b;
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .btn-remove:hover {
+            background: #ff6b6b;
+            color: #ffffff;
+        }
+
+        /* General Section */
+        section {
+            padding: 70px 8%;
+            text-align: center;
+        }
+
+        section h2 {
+            font-size: 34px;
+            color: var(--accent-gold);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+        }
+
+        section .section-subtitle {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 35px;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+        }
+
+        /* Search Box */
+        .search-container {
+            max-width: 550px;
+            margin: 0 auto 40px auto;
+            position: relative;
+        }
+
+        .search-container input {
+            width: 100%;
+            padding: 15px 25px;
+            border-radius: 30px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 15px;
+            font-family: 'Montserrat', sans-serif;
+            outline: none;
+            transition: 0.3s;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.4);
+        }
+
+        .search-container input:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px rgba(207, 168, 89, 0.3);
+        }
+
+        /* Cards Grid */
+        .menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid rgba(207, 168, 89, 0.15);
+            width: 290px;
+            padding: 18px;
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.35s ease;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-gold);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 15px rgba(207, 168, 89, 0.2);
+        }
+
+        .card .badge {
+            position: absolute;
+            top: 26px;
+            right: 26px;
+            background: rgba(14, 15, 18, 0.85);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.4s ease;
+        }
+
+        .card:hover img {
+            transform: scale(1.03);
+        }
+
+        .card h3 {
+            color: #ffffff;
+            font-size: 18px;
+            margin: 8px 0;
+            font-weight: 700;
+        }
+
+        .card .notes {
+            font-size: 12px;
+            color: var(--accent-gold);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .card p.desc {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 14px;
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+
+        .card .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .price {
+            color: var(--accent-gold);
+            font-size: 20px;
+            font-weight: 700;
+            font-family: 'Cinzel', serif;
+        }
+
+        .card .btn {
+            padding: 9px 18px;
+            font-size: 12px;
+        }
+
+        /* Cart Section */
+        .cart-wrapper {
+            margin-top: 60px;
+            padding-top: 30px;
+        }
+
+        .cart {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 30px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            box-shadow: var(--card-shadow);
+            text-align: left;
+        }
+
+        .cart h3 {
+            color: var(--accent-gold);
+            font-size: 22px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid rgba(207, 168, 89, 0.2);
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart p.item-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .cart ul {
+            list-style: none;
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+
+        .cart ul::-webkit-scrollbar {
+            width: 6px;
+        }
+        .cart ul::-webkit-scrollbar-thumb {
+            background: var(--accent-gold);
+            border-radius: 4px;
+        }
+
+        .cart li {
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .cart li .item-name {
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .cart li .item-price {
+            color: var(--accent-gold);
+            font-weight: 700;
+            margin-right: 15px;
+        }
+
+        .cart .total-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0;
+            padding-top: 15px;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        .cart .total-title {
+            font-size: 18px;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .cart .total-amount {
+            font-size: 24px;
+            color: var(--accent-gold);
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+        }
+
+        .cart .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 15px;
+            text-align: center;
+        }
+
+        .order-alert {
+            margin-top: 18px;
+            padding: 12px 18px;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+            background: rgba(207, 168, 89, 0.15);
+            border: 1px solid var(--accent-gold);
+            color: #f7e0a3;
+        }
+
+        /* About Section */
+        #about {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            line-height: 1.9;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        #about p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+        }
+
+        blockquote {
+            margin: 35px 0 10px 0;
+            padding: 20px 30px;
+            background: var(--bg-card);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 0 12px 12px 0;
+            font-style: italic;
+            color: #ffffff;
+            font-size: 18px;
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Specials Section */
+        #special {
+            background: var(--bg-primary);
+        }
+
+        /* Contact Section */
+        #contact {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border-color);
+        }
+
+        .contact-box {
+            max-width: 580px;
+            margin: 0 auto 40px auto;
+            background: var(--bg-card);
+            padding: 35px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            text-align: left;
+        }
+
+        .contact-box label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .contact-box input, 
+        .contact-box textarea {
+            width: 100%;
+            padding: 13px 16px;
+            margin-bottom: 18px;
+            background: var(--bg-primary);
+            border: 1px solid rgba(207, 168, 89, 0.2);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .contact-box input:focus, 
+        .contact-box textarea:focus {
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 10px rgba(207, 168, 89, 0.25);
+        }
+
+        .contact-box button {
+            width: 100%;
+            padding: 14px;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .contact-feedback {
+            margin-top: 18px;
+            padding: 12px;
+            background: rgba(207, 168, 89, 0.15);
+            border: 1px solid var(--accent-gold);
+            border-radius: 6px;
+            color: #f7e0a3;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        address {
+            font-style: normal;
+            margin-top: 25px;
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.9;
+        }
+
+        address strong {
+            color: var(--accent-gold);
+        }
+
+        /* Footer */
+        footer {
+            background: #090a0c;
+            color: var(--text-secondary);
+            text-align: center;
+            padding: 35px 20px;
+            line-height: 2;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 14px;
+        }
+
+        footer p.copyright {
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        footer a {
+            color: var(--accent-gold);
+            text-decoration: none;
+            transition: 0.3s;
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            header {
+                justify-content: center;
+                gap: 15px;
+                padding: 15px 5%;
+            }
+
+            nav {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .hero h2 {
+                font-size: 32px;
+            }
+
+            .hero p.tagline {
+                font-size: 17px;
+            }
+
+            section {
+                padding: 50px 5%;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+    </style>
+</head>
+<body ng-controller="PerfumeController">
+
+    <!-- Header -->
+    <header>
+        <a href="#home" class="logo-area">
+            <span class="logo-icon">&#10047;</span>
+            <h1>Ryan's Perfume</h1>
+        </a>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#collection">Collection</a>
+            <a href="#about">About</a>
+            <a href="#special">Specials</a>
+            <a href="#contact">Contact</a>
+            <a href="#cart">Bag <span class="cart-nav-badge">{{cart.length}}</span></a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <span class="hero-tag">Haute Parfumerie & Extrait De Parfum</span>
+            <h2>Welcome to Ryan's Perfume</h2>
+            <p class="tagline"><em>Where Every Scent Tells an Eternal Story.</em></p>
+            <p class="desc">
+                Immerse yourself in artisanal scents crafted with the rarest botanical essences, opulent ouds, and timeless French perfumery heritage.
+            </p>
+            <a href="#collection" class="btn">Explore Our Collection</a>
+        </section>
+
+        <!-- Perfume Collection Section -->
+        <section id="collection">
+            <h2>Our Signature Fragrances</h2>
+            <p class="section-subtitle">Meticulously blended for enduring elegance, unmatched sillage, and unforgettable distinction.</p>
+
+            <!-- Search Function -->
+            <div class="search-container">
+                <input type="text"
+                       ng-model="searchText"
+                       placeholder="Search by perfume name, notes (oud, vanilla, rose, amber)...">
+            </div>
+
+            <!-- Product Cards -->
+            <div class="menu">
+                <article class="card" ng-repeat="item in menu | filter:searchText">
+                    <span class="badge">{{item.category}}</span>
+                    <img ng-src="{{item.image}}" alt="{{item.name}}" loading="lazy">
+                    <div>
+                        <h3>{{item.name}}</h3>
+                        <p class="notes">{{item.notes}}</p>
+                        <p class="desc">{{item.description}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">Rs. {{item.price}}</span>
+                        <button class="btn" ng-click="addToCart(item)">
+                            Add to Bag
+                        </button>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Shopping Cart Section -->
+            <div class="cart-wrapper" id="cart">
+                <div class="cart">
+                    <h3>
+                        <span>Your Fragrance Bag</span>
+                        <span style="font-size: 14px; color: var(--accent-gold);">&#128092; Ryan's Boutique</span>
+                    </h3>
+                    <p class="item-count">Bottles selected: {{cart.length}}</p>
+
+                    <div ng-if="cart.length === 0" style="text-align: center; color: var(--text-muted); padding: 25px 0;">
+                        <em>Your bag is currently empty. Explore our collection above to add perfumes!</em>
+                    </div>
+
+                    <ul ng-if="cart.length > 0">
+                        <li ng-repeat="item in cart track by $index">
+                            <span class="item-name">{{item.name}}</span>
+                            <div>
+                                <span class="item-price">Rs. {{item.price}}</span>
+                                <button class="btn-remove" ng-click="removeFromCart($index)">
+                                    Remove
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="total-box">
+                        <span class="total-title">Total Investment:</span>
+                        <span class="total-amount">Rs. {{total()}}</span>
+                    </div>
+
+                    <button class="btn checkout-btn" ng-click="placeOrder()">
+                        Complete Order
+                    </button>
+
+                    <div class="order-alert" ng-if="message">
+                        {{message}}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <div class="about-content">
+                <h2>About Ryan's Perfume</h2>
+                <p class="section-subtitle">The Art of Artisanal Scent Crafting</p>
+                <p>
+                    At Ryan's Perfume, we believe a fragrance is much more than a cosmetic choice—it is an invisible signature, an aura of confidence, and an indelible memory etched in time.
+                </p>
+                <p>
+                    Every formulation is masterfully conceived using sustainably harvested naturals, exquisite florals from Grasse, warm woods from the Orient, and rich balsamic resins. Our extraits undergo slow maceration for at least six months to guarantee depth, complexity, and all-day longevity.
+                </p>
+                <blockquote>
+                    <q>Fragrance is the most intense form of memory, whispering elegance without uttering a single word.</q>
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- Special Offers Section -->
+        <section id="special">
+            <h2>Curated Specials & Gift Sets</h2>
+            <p class="section-subtitle">Exclusive limited-run formulations and collector editions at privileged values.</p>
+
+            <div class="menu">
+                <article class="card" ng-repeat="item in specials">
+                    <span class="badge" style="border-color: #ffd700; color: #ffd700;">Special Edition</span>
+                    <img ng-src="{{item.image}}" alt="{{item.name}}" loading="lazy">
+                    <div>
+                        <h3>{{item.name}}</h3>
+                        <p class="notes">{{item.notes}}</p>
+                        <p class="desc">{{item.description}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">Rs. {{item.price}}</span>
+                        <button class="btn" ng-click="addToCart(item)">
+                            Add to Bag
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Ryan's Concierge</h2>
+            <p class="section-subtitle">Inquire about bespoke fragrance consultations or custom gifting.</p>
+
+            <div class="contact-box">
+                <form ng-submit="sendMessage()">
+                    <label for="name">Your Full Name</label>
+                    <input id="name"
+                           type="text"
+                           ng-model="customer.name"
+                           placeholder="e.g. Alexander Vance"
+                           required>
+
+                    <label for="email">Email Address</label>
+                    <input id="email"
+                           type="email"
+                           ng-model="customer.email"
+                           placeholder="e.g. alexander@example.com"
+                           required>
+
+                    <label for="feedback">Your Message or Inquiry</label>
+                    <textarea id="feedback"
+                              ng-model="customer.feedback"
+                              rows="4"
+                              placeholder="Tell us about your fragrance preferences or inquiries..."
+                              required></textarea>
+
+                    <button type="submit" class="btn">
+                        Send Message
+                    </button>
+
+                    <div class="contact-feedback" ng-if="contactMessage">
+                        {{contactMessage}}
+                    </div>
+                </form>
+            </div>
+
+            <address>
+                <p><strong>Flagship Showroom:</strong> Luxury Avenue, 5th Floor, High Street Mall, Chennai, India</p>
+                <p><strong>Concierge Hotline:</strong> +91 98765 43210 &nbsp;|&nbsp; <strong>Support:</strong> concierge@ryansperfume.example</p>
+                <p><strong>Hours:</strong> Monday – Saturday: 10:00 AM – 9:00 PM</p>
+            </address>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="copyright">&copy; 2026 Ryan's Perfume. All Rights Reserved.</p>
+        <p>Crafted with Passion & Olfactory Perfection.</p>
+        <p><a href="#home">Back to Top &uarr;</a></p>
+    </footer>
+
+    <!-- AngularJS Functionality -->
+    <script>
+        var app = angular.module("ryanPerfumeApp", []);
+
+        app.controller("PerfumeController", function($scope) {
+            // Fragrance catalog
+            $scope.menu = [
+                {
+                    name: "Ryan's Royal Oud",
+                    category: "Extrait De Parfum",
+                    notes: "Cambodian Oud • Saffron • Warm Amber",
+                    description: "An opulent, aristocratic scent blending deep smoky Cambodian oud with warm spices, rare saffron, and rich resinous amber.",
+                    price: 2499,
+                    image: "https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Velvet Amber & Vanilla",
+                    category: "Eau De Parfum",
+                    notes: "Golden Amber • Bourbon Vanilla • Tonka Bean",
+                    description: "A warm and seductive oriental gourmand boasting intoxicating bourbon vanilla, roasted tonka bean, and molten golden amber.",
+                    price: 1899,
+                    image: "https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Noir Sauvage",
+                    category: "Eau De Parfum",
+                    notes: "Calabrian Bergamot • Sichuan Pepper • Vetiver",
+                    description: "A daring, nocturnal statement opening with zesty Italian bergamot, charged with crushed black pepper, and anchored by smoky Haitian vetiver.",
+                    price: 2199,
+                    image: "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Celestial Rose & Peony",
+                    category: "Floral Elixir",
+                    notes: "Grasse Rose • Fresh Peony • White Musk",
+                    description: "An ethereal floral melody capturing delicate Damask rose petals kissed with morning dew, pink peonies, and soft cashmere musk.",
+                    price: 1750,
+                    image: "https://images.unsplash.com/photo-1588405748880-12d1d2a59f75?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Oceanic Drift",
+                    category: "Aquatic Fresh",
+                    notes: "Sea Salt • Sicilian Grapefruit • Driftwood",
+                    description: "An exhilarating blast of invigorating sea spray, chilled citrus peel, mineral salt crystals, and sun-bleached coastal driftwood.",
+                    price: 1599,
+                    image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Gilded Santal",
+                    category: "Woody Oriental",
+                    notes: "Mysore Sandalwood • Cardamom • Iris",
+                    description: "Creamy Mysore sandalwood harmonized with crushed green cardamom pods, powdery Florentine iris root, and smooth leather.",
+                    price: 2299,
+                    image: "https://images.unsplash.com/photo-1615397349754-cfa2066a298e?auto=format&fit=crop&w=600&q=80"
+                }
+            ];
+
+            // Special offers & promotional bundles
+            $scope.specials = [
+                {
+                    name: "Royal Duo Gift Set (2 x 50ml)",
+                    notes: "Royal Oud + Velvet Amber",
+                    description: "Our two crown-jewel fragrances encased in a handcrafted royal velvet gift case. Perfect for day and evening wear.",
+                    price: 3499,
+                    image: "https://images.unsplash.com/photo-1547887537-6158d64c35b3?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Artisan Discovery Coffret",
+                    notes: "5 x 10ml Travel Sprays",
+                    description: "Explore the full Ryan's Perfume universe. Includes 5 deluxe travel atomizers across our floral, woody, aquatic, and oud families.",
+                    price: 1299,
+                    image: "https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&w=600&q=80"
+                },
+                {
+                    name: "Midnight Seduction (Collector Flacon)",
+                    notes: "Smoky Birch • Saffron • Black Plum",
+                    description: "Ultra-concentrated limited bottling (35% perfume oil). Macerated for 8 months in French oak casks for unprecedented intensity.",
+                    price: 2999,
+                    image: "https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?auto=format&fit=crop&w=600&q=80"
+                }
+            ];
+
+            // Shopping cart state
+            $scope.cart = [];
+            $scope.message = "";
+            $scope.customer = {};
+            $scope.contactMessage = "";
+
+            // Add item to shopping cart
+            $scope.addToCart = function(item) {
+                $scope.cart.push(item);
+                $scope.message = item.name + " added to your fragrance bag!";
+            };
+
+            // Remove item from shopping cart
+            $scope.removeFromCart = function(index) {
+                var removed = $scope.cart[index];
+                $scope.cart.splice(index, 1);
+                $scope.message = (removed ? removed.name : "Item") + " removed from your bag.";
+            };
+
+            // Calculate total price dynamically
+            $scope.total = function() {
+                var sum = 0;
+                angular.forEach($scope.cart, function(item) {
+                    sum += item.price;
+                });
+                return sum;
+            };
+
+            // Demo order submission
+            $scope.placeOrder = function() {
+                if ($scope.cart.length === 0) {
+                    $scope.message = "Please add at least one fragrance to your bag first!";
+                } else {
+                    $scope.message = "Thank you! Your order for " + $scope.cart.length + " fragrance(s) totalling Rs. " + $scope.total() + " has been placed. (Demo confirmation)";
+                }
+            };
+
+            // Contact form submission
+            $scope.sendMessage = function() {
+                $scope.contactMessage = "Thank you, " + $scope.customer.name + "! Your message has been received by Ryan's Concierge team. We will reply to " + $scope.customer.email + " promptly.";
+                $scope.customer = {};
+            };
+        });
+    </script>
+</body>
+</html>

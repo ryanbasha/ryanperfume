@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="ryanPerfumeApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ryan's Perfume - Luxury Fragrances & Artisanal Scents</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- External Modular Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- AngularJS 1.8.2 CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+</head>
+<body ng-controller="PerfumeController">
+
+    <!-- Header -->
+    <header>
+        <a href="#home" class="logo-area">
+            <span class="logo-icon">&#10047;</span>
+            <h1>Ryan's Perfume</h1>
+        </a>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#collection">Collection</a>
+            <a href="#about">About</a>
+            <a href="#special">Specials</a>
+            <a href="#contact">Contact</a>
+            <a href="#cart">Bag <span class="cart-nav-badge">{{cart.length}}</span></a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <span class="hero-tag">Haute Parfumerie & Extrait De Parfum</span>
+            <h2>Welcome to Ryan's Perfume</h2>
+            <p class="tagline"><em>Where Every Scent Tells an Eternal Story.</em></p>
+            <p class="desc">
+                Immerse yourself in artisanal scents crafted with the rarest botanical essences, opulent ouds, and timeless French perfumery heritage.
+            </p>
+            <a href="#collection" class="btn">Explore Our Collection</a>
+        </section>
+
+        <!-- Perfume Collection Section -->
+        <section id="collection">
+            <h2>Our Signature Fragrances</h2>
+            <p class="section-subtitle">Meticulously blended for enduring elegance, unmatched sillage, and unforgettable distinction.</p>
+
+            <!-- Search Function -->
+            <div class="search-container">
+                <input type="text"
+                       ng-model="searchText"
+                       placeholder="Search by perfume name, notes (oud, vanilla, rose, amber)...">
+            </div>
+
+            <!-- Product Cards -->
+            <div class="menu">
+                <article class="card" ng-repeat="item in menu | filter:searchText">
+                    <span class="badge">{{item.category}}</span>
+                    <img ng-src="{{item.image}}" alt="{{item.name}}" loading="lazy">
+                    <div>
+                        <h3>{{item.name}}</h3>
+                        <p class="notes">{{item.notes}}</p>
+                        <p class="desc">{{item.description}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">Rs. {{item.price}}</span>
+                        <button class="btn" ng-click="addToCart(item)">
+                            Add to Bag
+                        </button>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Shopping Cart Section -->
+            <div class="cart-wrapper" id="cart">
+                <div class="cart">
+                    <h3>
+                        <span>Your Fragrance Bag</span>
+                        <span style="font-size: 14px; color: var(--accent-gold);">&#128092; Ryan's Boutique</span>
+                    </h3>
+                    <p class="item-count">Bottles selected: {{cart.length}}</p>
+
+                    <div ng-if="cart.length === 0" style="text-align: center; color: var(--text-muted); padding: 25px 0;">
+                        <em>Your bag is currently empty. Explore our collection above to add perfumes!</em>
+                    </div>
+
+                    <ul ng-if="cart.length > 0">
+                        <li ng-repeat="item in cart track by $index">
+                            <span class="item-name">{{item.name}}</span>
+                            <div>
+                                <span class="item-price">Rs. {{item.price}}</span>
+                                <button class="btn-remove" ng-click="removeFromCart($index)">
+                                    Remove
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <div class="total-box">
+                        <span class="total-title">Total Investment:</span>
+                        <span class="total-amount">Rs. {{total()}}</span>
+                    </div>
+
+                    <button class="btn checkout-btn" ng-click="placeOrder()">
+                        Complete Order
+                    </button>
+
+                    <div class="order-alert" ng-if="message">
+                        {{message}}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about">
+            <div class="about-content">
+                <h2>About Ryan's Perfume</h2>
+                <p class="section-subtitle">The Art of Artisanal Scent Crafting</p>
+                <p>
+                    At Ryan's Perfume, we believe a fragrance is much more than a cosmetic choice—it is an invisible signature, an aura of confidence, and an indelible memory etched in time.
+                </p>
+                <p>
+                    Every formulation is masterfully conceived using sustainably harvested naturals, exquisite florals from Grasse, warm woods from the Orient, and rich balsamic resins. Our extraits undergo slow maceration for at least six months to guarantee depth, complexity, and all-day longevity.
+                </p>
+                <blockquote>
+                    <q>Fragrance is the most intense form of memory, whispering elegance without uttering a single word.</q>
+                </blockquote>
+            </div>
+        </section>
+
+        <!-- Special Offers Section -->
+        <section id="special">
+            <h2>Curated Specials & Gift Sets</h2>
+            <p class="section-subtitle">Exclusive limited-run formulations and collector editions at privileged values.</p>
+
+            <div class="menu">
+                <article class="card" ng-repeat="item in specials">
+                    <span class="badge" style="border-color: #ffd700; color: #ffd700;">Special Edition</span>
+                    <img ng-src="{{item.image}}" alt="{{item.name}}" loading="lazy">
+                    <div>
+                        <h3>{{item.name}}</h3>
+                        <p class="notes">{{item.notes}}</p>
+                        <p class="desc">{{item.description}}</p>
+                    </div>
+                    <div class="card-footer">
+                        <span class="price">Rs. {{item.price}}</span>
+                        <button class="btn" ng-click="addToCart(item)">
+                            Add to Bag
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact">
+            <h2>Contact Ryan's Concierge</h2>
+            <p class="section-subtitle">Inquire about bespoke fragrance consultations or custom gifting.</p>
+
+            <div class="contact-box">
+                <form ng-submit="sendMessage()">
+                    <label for="name">Your Full Name</label>
+                    <input id="name"
+                           type="text"
+                           ng-model="customer.name"
+                           placeholder="e.g. Alexander Vance"
+                           required>
+
+                    <label for="email">Email Address</label>
+                    <input id="email"
+                           type="email"
+                           ng-model="customer.email"
+                           placeholder="e.g. alexander@example.com"
+                           required>
+
+                    <label for="feedback">Your Message or Inquiry</label>
+                    <textarea id="feedback"
+                              ng-model="customer.feedback"
+                              rows="4"
+                              placeholder="Tell us about your fragrance preferences or inquiries..."
+                              required></textarea>
+
+                    <button type="submit" class="btn">
+                        Send Message
+                    </button>
+
+                    <div class="contact-feedback" ng-if="contactMessage">
+                        {{contactMessage}}
+                    </div>
+                </form>
+            </div>
+
+            <address>
+                <p><strong>Flagship Showroom:</strong> Luxury Avenue, 5th Floor, High Street Mall, Chennai, India</p>
+                <p><strong>Concierge Hotline:</strong> +91 98765 43210 &nbsp;|&nbsp; <strong>Support:</strong> concierge@ryansperfume.example</p>
+                <p><strong>Hours:</strong> Monday – Saturday: 10:00 AM – 9:00 PM</p>
+            </address>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p class="copyright">&copy; 2026 Ryan's Perfume. All Rights Reserved.</p>
+        <p>Crafted with Passion & Olfactory Perfection.</p>
+        <p><a href="#home">Back to Top &uarr;</a></p>
+    </footer>
+
+    <!-- Modular External AngularJS Application Script -->
+    <script src="app.js"></script>
+</body>
+</html>
